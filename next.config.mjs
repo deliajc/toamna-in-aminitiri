@@ -1,4 +1,12 @@
-const supabase = process.env.SUPABASE_URL ? new URL(process.env.SUPABASE_URL).origin : "https://*.supabase.co";
+function supabaseOrigin() {
+  try {
+    return new URL((process.env.SUPABASE_URL || "").trim()).origin;
+  } catch {
+    console.warn("\n⚠ SUPABASE_URL lipsește sau nu este o adresă validă (ex.: https://abcd.supabase.co).\n");
+    return "https://*.supabase.co";
+  }
+}
+const supabase = supabaseOrigin();
 
 const csp = [
   "default-src 'self'",

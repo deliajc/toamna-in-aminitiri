@@ -7,10 +7,12 @@ export const dynamic = "force-dynamic";
 
 // Diagnostic: reports only yes/no checks and error messages, never secrets.
 export async function GET() {
-  const url = process.env.SUPABASE_URL || "";
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  const url = (process.env.SUPABASE_URL || "").trim();
+  const key = (process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
   const out: Record<string, unknown> = {
-    supabaseUrl: /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(url) ? "ok" : url ? "format neobișnuit" : "lipsește",
+    supabaseUrl: /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(url) ? "ok" : url
+      ? `GREȘIT: trebuie să fie de forma https://abcd.supabase.co (acum începe cu „${url.slice(0, 12)}…”)`
+      : "lipsește",
     serviceKey: !key
       ? "lipsește"
       : key.startsWith("sb_secret_") || (key.startsWith("eyJ") && key.length > 100)
