@@ -1,6 +1,6 @@
 function supabaseOrigin() {
   try {
-    return new URL((process.env.SUPABASE_URL || "").trim()).origin;
+    return new URL((process.env.SUPABASE_URL || "").trim().replace(/^["']|["']$/g, "")).origin;
   } catch {
     console.warn("\n⚠ SUPABASE_URL lipsește sau nu este o adresă validă (ex.: https://abcd.supabase.co).\n");
     return "https://*.supabase.co";

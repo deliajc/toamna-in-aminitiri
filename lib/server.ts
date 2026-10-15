@@ -8,10 +8,22 @@ import { BUCKET } from "./config";
 
 let client: SupabaseClient | null = null;
 
+const clean = (v?: string) => (v || "").trim().replace(/^["'\s]+|["'\s]+$/g, "").replace(/^Bearer\s+/i, "");
+
+/** Accepts a pasted URL with extra path (e.g. /rest/v1/) and keeps only the origin. */
+export function supabaseUrl() {
+  try {
+    return new URL(clean(process.env.SUPABASE_URL)).origin;
+  } catch {
+    return "";
+  }
+}
+export const serviceKey = () => clean(process.env.SUPABASE_SERVICE_ROLE_KEY);
+
 export function db(): SupabaseClient {
   if (!client) {
-    const url = process.env.SUPABASE_URL?.trim();
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+    const url = supabaseUrl();
+    const key = serviceKey();
     if (!url || !key) throw new Error("Lipsesc SUPABASE_URL sau SUPABASE_SERVICE_ROLE_KEY.");
     client = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
   }
