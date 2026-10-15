@@ -48,7 +48,10 @@ export async function POST(req: Request) {
     supa.from("media").select("id", { count: "exact", head: true }).gte("created_at", since60),
     supa.from("media").select("id", { count: "exact", head: true }).neq("status", "rejected"),
   ]);
-  if (perIp.error || global.error || total.error) return err("Serverul este momentan indisponibil. Încearcă din nou.", 503);
+  if (perIp.error || global.error || total.error) {
+    console.error("media count failed", perIp.error || global.error || total.error);
+    return err("Serverul este momentan indisponibil. Încearcă din nou.", 503);
+  }
   if ((perIp.count ?? 0) >= PER_IP_10MIN) return err("Ai atins limita temporară de încărcări. Revino peste câteva minute.", 429);
   if ((global.count ?? 0) >= GLOBAL_PER_HOUR || (total.count ?? 0) >= MAX_TOTAL_FILES)
     return err("Colecția este temporar plină. Anunță organizatorii.", 503);
@@ -57,6 +60,7 @@ export async function POST(req: Request) {
   const path = `${day}/${randomUUID()}.${ext}`; // unique name, never overwrites
 
   const { data: signed, error: signErr } = await storage().createSignedUploadUrl(path);
+  if (signErr || !signed) console.error("signed upload failed", signErr);
   if (signErr || !signed) return err("Nu am putut pregăti încărcarea. Încearcă din nou.", 503);
 
   const { data: row, error: insErr } = await supa
@@ -64,6 +68,7 @@ export async function POST(req: Request) {
     .insert({ path, kind, mime, size, ip_hash: ipHash })
     .select("id")
     .single();
+  if (insErr || !row) console.error("media insert failed", insErr);
   if (insErr || !row) return err("Nu am putut pregăti încărcarea. Încearcă din nou.", 503);
 
   return NextResponse.json({ id: row.id, ticket: ticketFor(row.id), signedUrl: signed.signedUrl, mime });

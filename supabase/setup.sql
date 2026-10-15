@@ -41,3 +41,6 @@ create index if not exists media_ip_created_idx on public.media (ip_hash, create
 
 -- RLS activat fără politici = tabel inaccesibil pentru chei publice (anon).
 alter table public.media enable row level security;
+
+-- Proiectele noi Supabase nu mai dau drepturi automat pe tabelele noi.
+grant select, insert, update, delete on table public.media to service_role;
