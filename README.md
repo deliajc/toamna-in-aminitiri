@@ -19,8 +19,8 @@ Ai nevoie de trei conturi gratuite: **Supabase** (stocarea), **GitHub** (codul) 
 3. **Project Settings → API**: copiază **Project URL** și cheia **service_role** (sau o cheie „secret"). Le vei folosi la pasul 3.
 
 > **Limita pentru videoclipuri.** Pe planul **Free**, Supabase acceptă cel mult **50 MB per fișier** — un videoclip de 1–2 minute filmat cu telefonul depășește ușor această limită. Ai două variante:
-> - **Recomandat pentru eveniment:** treci proiectul pe planul **Pro** pe durata evenimentului, apoi în **Storage → Settings** setează „Upload file size limit" la 500 MB. Site-ul acceptă implicit videoclipuri de până la 500 MB.
-> - **Rămâi pe Free:** setează `NEXT_PUBLIC_MAX_VIDEO_MB=50` (pasul 3). Elevii vor vedea un mesaj clar dacă un videoclip e prea mare.
+> - **Recomandat pentru eveniment:** treci proiectul pe planul **Pro** pe durata evenimentului, apoi în **Storage → Settings** setează „Upload file size limit" la 500 MB. Apoi setează în Vercel `NEXT_PUBLIC_MAX_VIDEO_MB=500`.
+> - **Rămâi pe Free:** nu trebuie să faci nimic — limita implicită este 50 MB. Elevii vor vedea un mesaj clar dacă un videoclip e prea mare.
 >
 > Proiectele Free se suspendă după o săptămână fără activitate — deschide proiectul în ziua dinaintea evenimentului.
 
@@ -87,7 +87,7 @@ Fișierele ajung în `export/fotografii` și `export/videoclipuri`; scriptul poa
 ## Formate acceptate
 
 Fotografii: JPG, PNG, HEIC/HEIF (iPhone), WebP, GIF — implicit până la 40 MB.
-Video: MP4, MOV (iPhone), WebM, 3GP, M4V — implicit până la 500 MB.
+Video: MP4, MOV (iPhone), WebM, 3GP, M4V — implicit până la 50 MB (planul Free).
 Maximum 30 de fișiere per trimitere; elevii pot trimite de mai multe ori.
 
 ## Dezvoltare locală

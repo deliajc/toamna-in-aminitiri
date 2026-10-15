@@ -3,7 +3,7 @@
 export const MB = 1024 * 1024;
 
 export const MAX_IMAGE_BYTES = Number(process.env.NEXT_PUBLIC_MAX_IMAGE_MB || 40) * MB;
-export const MAX_VIDEO_BYTES = Number(process.env.NEXT_PUBLIC_MAX_VIDEO_MB || 500) * MB;
+export const MAX_VIDEO_BYTES = Number(process.env.NEXT_PUBLIC_MAX_VIDEO_MB || 50) * MB;
 export const MAX_FILES_PER_SUBMISSION = 30;
 
 export const REQUIRE_CONSENT = process.env.NEXT_PUBLIC_REQUIRE_CONSENT === "true";
